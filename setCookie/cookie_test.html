@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>COOKIE值测试</title>
+    <script type="text/javascript">
+        window.onload = function() {
+            if (navigator.cookieEnabled) {
+                var sum = readCookie("sum");
+                document.getElementById("cookie-test").innerHTML = sum;
+                if (sum) {
+                    var iSum = parseInt(sum) + 1;
+                    //alert("cookie count is:" + iSum);
+                    if (iSum > 5) {
+                        eraseCookie("sum");
+                    }
+                    else {
+                        setCookie("sum",iSum);
+                    }
+                }
+                else {
+                    //alert("no cookie, setting now!");
+                    setCookie("sum",0);
+                }
+            }
+            //将cookie有效期设置为2016年1月1日19点30分30秒
+            function setCookie(key,value) {
+                var cookieDate = new Date(2016,1,1,19,30,30);
+                document.cookie = key + "=" + encodeURI(value) + "; expires=" + cookieDate.toGMTString() + "; path=/";
+            }
+            //在每个cookie之前用分号隔开
+            function readCookie(key) {
+                var cookie = document.cookie;
+                var first = cookie.indexOf(key + "=");
+                //存在cookie
+                if (first >= 0) {
+                    var str = cookie.substring(first,cookie.length);
+                    var last = str.indexOf(";");
+                    //如果是最后一个cookie
+                    if (last < 0) {
+                        last = str.length;
+                    }
+                    //获取cookie的值
+                    str = str.substring(0,last).split("=");
+                    return decodeURI(str[1]);
+                }
+                else {
+                    return null;
+                }
+            }
+            //将cookie的有效期设置成过去，已达到删除cookie的效果
+            function eraseCookie(key) {
+                var cookieDate = new Date(2000,1,1,1,1,1);
+                document.cookie = key + "= ; expires=" + cookieDate.toGMTString() + "; path=/";
+            }
+        };
+    </script>
+</head>
+<body>
+<div style="margin: 100px auto; width: 200px; height: 150px; padding-top: 80px; background: cornflowerblue;">
+    <p>cookie text,the value is:</p>
+    <div id="cookie-test" style="margin-left: 30px;"></div>
+</div>
+</body>
+</html>
