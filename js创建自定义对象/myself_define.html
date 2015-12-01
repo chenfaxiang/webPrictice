@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>js中创建自定义对象test</title>
+    <script type="text/javascript">
+        var Tune = function(title) {
+            this.title = title;
+            var performedBy = new Array();
+            this.addPerformer = function(performer) {
+                var i = performedBy.length;
+                performedBy[i] = performer;
+            }
+            this.listPerformer = function() {
+                var singers = "";
+                for(var i = 0; i < performedBy.length; i++) {
+                    singers += performedBy[i] + "";
+                }
+                return singers;
+            }
+        }
+        window.onload = function() {
+            var song = new Tune("hello");
+            song.addPerformer("Me");
+            song.addPerformer("You");
+            song.addPerformer("Us");
+            document.writeln("song is " + song.title + "<br/>");
+            document.writeln("Performed by " + song.listPerformer());
+        }
+    </script>
+</head>
+<body>
+<p>js中创建自定义对象test内容</p>
+</body>
+</html>
