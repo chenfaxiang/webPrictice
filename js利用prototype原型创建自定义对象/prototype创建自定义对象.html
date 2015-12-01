@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>js中利用prototype原型创建自定义对象</title>
+    <script type="text/javascript">
+        function Tune(title) {
+            this.title = title;
+        }
+        function printTitle() {
+            document.writeln(this.title + "<br/>");
+        }
+        window.onload = function () {
+            Tune.prototype.print = printTitle;//通过对象Tune对象的prototype属性将printTitle对象添加到Tune对象的原型中
+            var oneTune = new Tune("one title");
+            oneTune.print();
+
+            var anotherTune = new Tune("another title");
+            anotherTune.print();
+        }
+    </script>
+</head>
+<body>
+<p>js中利用prototype原型创建自定义对象</p>
+</body>
+</html>
