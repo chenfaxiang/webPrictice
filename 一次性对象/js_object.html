@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>对调两个元素背景颜色的一次性对象</title>
+    <style type="text/css">
+        div {
+            margin: 20px;
+            width: 200px;
+            height: 200px;
+        }
+        #div1 {
+            background-color: #ffff00;
+        }
+        #div2 {
+            background-color: #00ff00;
+        }
+    </style>
+    <script type="text/javascript">
+        var flipper = {
+            obj1 : null,
+            obj2 : null,
+            getStyle : function (obj,jsStyleName,styleName) {
+                if (obj.currentStyle) {
+                    return obj.currentStyle[jsStyleName];
+                }
+                else if (window.getComputedStyle) {
+                    return document.defaultView.getComputedStyle(obj,null).getPropertyValue(styleName);
+                }
+                else {
+                    return undefined;
+                }
+            },
+            setBackgroundColor : function (obj, color) {
+                obj.style.backgroundColor = color;
+            },
+            flipColors : function () {
+                var color1 = this.getStyle(this.obj1,"backgroundColor","background-color");
+                var color2 = this.getStyle(this.obj2,"backgroundColor","background-color");
+                this.setBackgroundColor(this.obj1,color2);
+                this.setBackgroundColor(this.obj2,color1);
+            }
+        };
+        window.onload = function () {
+            flipper.obj1 = document.getElementById("div1");
+            flipper.obj2 = document.getElementById("div2");
+        };
+        document.onclick = function () {
+            flipper.flipColors();
+        }
+    </script>
+</head>
+<body>
+<div id="div1">
+    <p>This is first square.</p>
+</div>
+<div id="div2">
+    <p>This is the second squeare.</p>
+</div>
+</body>
+</html>
