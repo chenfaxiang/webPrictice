@@ -1,0 +1,22 @@
+body {
+    font-size: 12px;
+}
+h3 {
+    margin: 0;
+}
+.divShow {
+    border: 1px solid #cc0;
+    height: 300px;
+    padding: 5px;
+    font-size: 12px;
+    overflow-y: scroll;
+}
+#divMain {
+    border: 3px solid #ccc;
+}
+#divMain .divtop {
+    padding: 10px;
+}
+#divMain .divtop .divL {
+    float: left;
+}
