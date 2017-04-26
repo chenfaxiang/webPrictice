@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>原生js实现拖拽</title>
+    <style>
+        .draged-obj {
+            width: 300px;
+            height: 200px;
+            border: 1px solid #000;
+            position: relative;
+        }
+        .trigger-drag {
+            width: 100%;
+            height: 20px;
+            background: #f90;
+            cursor: move;
+        }
+        .drag-content {
+            width: 100%;
+            height: 100px;
+            background: #fff;
+            text-align: center;
+            padding-top: 80px;
+        }
+    </style>
+</head>
+<body>
+<div class="draged-obj" id="j-draged-obj">
+    <div class="trigger-drag" id="j-trigger-drag">鼠标点击这里后不松进行拖拽</div>
+    <div class="j-drag-content drag-content">
+        这里的整个框都会被拖动呢……
+    </div>
+</div>
+
+<script>
+    var dragEvn = {
+        dragFlag : false,       // 是否拖拽标志
+        left: 0,                // 默认的left
+        top: 0,                 // 默认的top
+        currentX: 0,            // 默认的 被拖拽box x坐标
+        currentY: 0,            // 默认的 被拖拽box y坐标
+        init : function () {
+            var _this = this,
+                triggerDragDom = document.getElementById("j-trigger-drag"),   // 触发拖拽对象
+                dragedDom      = document.getElementById("j-draged-obj");     // 被拖拽对象
+
+            if (_this.getCssStyle(dragedDom,'left') !== "auto") {
+                // 保存 被拖拽box 的初始left值
+                _this.left = _this.getCssStyle(dragedDom,'left');
+            }
+            if (_this.getCssStyle(dragedDom,'top') !== "auto") {
+                // 保存 被拖拽box 的初始top值
+                _this.top = _this.getCssStyle(dragedDom,'top');
+            }
+
+            // 按下鼠标  记录初始被拖拽box的X,Y值
+            triggerDragDom.onmousedown = function (even) {
+                var e;
+                _this.dragFlag = true;  // 鼠标按下，标志更改
+
+                if (!even) {
+                    // 判断是否是IE浏览器
+                    even = window.even;
+
+                    // IE下避免选中文字
+                    triggerDragDom.onselectstart = function () {
+                        return false;
+                    }
+                }
+
+                e = even;
+                _this.currentX = e.clientX;
+                _this.currentY = e.clientY;
+            };
+
+            // 移动鼠标 计算当前被拖拽box移动的距离
+            // 这里用 触发拖拽的dom 也可以实现当前被拖拽box被拖动。
+            // 但是，当鼠标在移动过程中脱离了别拖拽对象，此时就会出现拖拽异常
+            // 因此，move用document绑定，从底层杜绝鼠标脱离触发拖拽dom时产生的问题
+            document.onmousemove = function (event) {
+                var e = event ? event : window.event;
+                if (_this.dragFlag) {
+                    // 鼠标处于按下状态
+                    var nowX = e.clientX,
+                        nowY = e.clientY;
+                    var disX = nowX - _this.currentX,
+                        disY = nowY - _this.currentY;
+                    dragedDom.style.left = parseInt(_this.left) + disX + "px";
+                    dragedDom.style.top  = parseInt(_this.top)  + disY + "px";
+                }
+            };
+
+            // 放开鼠标 计算当前被拖拽box的X,Y的距离
+            // 这里用 document 绑定事件跟移动事件(move)理由一样
+            document.onmouseup = function () {
+                // 放开鼠标  拖动标志位false
+                _this.dragFlag = false;
+                // 重新计算当前的 currentX,currentY值
+                if (_this.getCssStyle(dragedDom,'left') !== "auto") {
+                    _this.left = _this.getCssStyle(dragedDom,'left');
+                }
+                if (_this.getCssStyle(dragedDom,'top') !== "auto") {
+                    _this.top = _this.getCssStyle(dragedDom,'top');
+                }
+            }
+
+        },
+        /**
+         * 获取当前对象的css属性
+         * @param _obj
+         * @param _key
+         * @returns {string}
+         * 主要是处理  被拖拽box  的left,top
+         */
+        getCssStyle : function (_obj,_key) {
+            return _obj.currentStyle ? _obj.currentStyle[_key] : document.defaultView.getComputedStyle(_obj,false)[_key];
+        }
+    };
+    dragEvn.init();
+</script>
+</body>
+</html>
