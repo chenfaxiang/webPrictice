@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>桌面通知</title>
+    <style>
+        .web-notification-content {
+            width: 300px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="web-notification-content">
+        <button id="j-web-notification">点击这个按钮将弹出一个桌面通知</button>
+    </div>
+
+    <script>
+        var webNotification = {
+            init : function () {
+                var _this = this;
+                if (window.Notification) {
+                    // 支持notification
+                    _this.notificationShow();
+                } else {
+                    alert("您的浏览器不支持桌面通知！");
+                }
+            },
+            notificationShow : function () {
+                var _this = this,
+                    webNotificationBtn = document.getElementById("j-web-notification");
+                webNotificationBtn.onclick = function () {
+                    if (window.Notification.permission == "granted") {
+                        // Notification 允许弹出
+                        _this.newNotification();
+                    } else if (window.Notification.permission != "denied" || Notification.permission == "default") {
+                        // Notification 询问能够弹出
+                        window.Notification.requestPermission(function (permission) {
+                            if (permission == "granted") {
+                                // 选择了允许弹出，即实例化一个桌面通知
+                                _this.newNotification();
+                            }
+                        });
+                    }
+                }
+            },
+            /**
+             * 实例化一个桌面通知
+             */
+            newNotification : function () {
+                var nowWebNotification = new Notification("这是第一个桌面通知",{
+                    "icon": "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=244995024,1837647128&fm=80&w=179&h=119&img.PNG",
+                    "body": "内容哇咔咔……",
+                    "tag" : "1.0"
+                });
+                nowWebNotification.onclick = function () {
+                    this.close();
+                }
+            }
+        };
+        webNotification.init();
+    </script>
+</body>
+</html>
