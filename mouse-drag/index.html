@@ -112,6 +112,10 @@
          * @param _key
          * @returns {string}
          * 主要是处理  被拖拽box  的left,top
+         * style            document.style.left 也能拿到样式值，但是只能拿到行内样式，其他的需要currentStyle
+         * currentStyle     IE浏览器获取当前dom样式(行内、内联、外部样式表)的值
+         * getComputedStyle FF浏览器获取当前dom样式
+         * document.defaultView  === window  为true；但是，在FF中为了兼容低版本，需要用document.defaultView
          */
         getCssStyle : function (_obj,_key) {
             return _obj.currentStyle ? _obj.currentStyle[_key] : document.defaultView.getComputedStyle(_obj,false)[_key];
